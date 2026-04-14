@@ -1,0 +1,48 @@
+/* Sidebar background */
+.sidebar {
+    background-color: #1e293b;
+}
+
+/* Background cho các tấm thẻ content */
+.card-bg {
+    background-color: #1e293b;
+}
+
+/* Style cho các nút chọn chế độ */
+.btn-mode {
+    background-color: #334155;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+}
+
+.btn-active {
+    background-color: #8b5cf6 !important;
+    color: white !important;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+/* Nút đáp án */
+.answer-btn {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    transition: all 0.2s;
+}
+
+.answer-btn:hover {
+    background-color: #334155;
+    transform: translateY(-2px);
+}
+
+/* Ẩn hiện màn hình */
+.hidden {
+    display: none !important;
+}
+
+/* Custom scrollbar cho sidebar */
+#level-list::-webkit-scrollbar {
+    width: 4px;
+}
+#level-list::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 10px;
+}
