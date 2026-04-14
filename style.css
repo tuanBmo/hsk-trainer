@@ -1,50 +1,54 @@
 /* Sidebar */
 .sidebar { background-color: #1e293b; }
 
-/* Level Buttons */
+/* Level Buttons - Nhỏ trên mobile, to trên PC */
 .level-btn {
-    background-color: #1e293b;
+    background-color: #334155;
     border: 1px solid #475569;
     color: #cbd5e1;
-    border-radius: 12px;
-    padding: 10px;
-    width: 100%;
+    border-radius: 10px;
+    padding: 8px 4px;
+    font-size: 10px;
     font-weight: bold;
-    transition: all 0.2s ease;
+    text-align: center;
 }
-.level-btn:hover { background-color: #334155; border-color: #94a3b8; }
-.level-btn.active { background-color: #0ea5e9; border-color: #38bdf8; color: white; box-shadow: 0 0 15px rgba(14, 165, 233, 0.4); }
+@media (min-width: 768px) {
+    .level-btn { font-size: 14px; padding: 12px; }
+}
+.level-btn.active { background-color: #0ea5e9; border-color: #38bdf8; color: white; box-shadow: 0 0 10px rgba(14, 165, 233, 0.4); }
 
 /* Mode Buttons */
-.btn-mode { background-color: #334155; color: #94a3b8; border: 1px solid transparent; transition: 0.3s; }
-.active-mode { background-color: #8b5cf6 !important; color: white !important; border-color: #a78bfa !important; box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+.btn-mode { background-color: #334155; color: #94a3b8; border: 1px solid transparent; }
+.active-mode { background-color: #8b5cf6 !important; color: white !important; border-color: #a78bfa !important; }
 
 /* Start Button */
-.btn-start { background-color: #0ea5e9; border-radius: 50px; }
-.btn-start:hover { background-color: #0284c7; transform: translateY(-3px); }
+.btn-start { background-color: #0ea5e9; border-radius: 100px; }
 
-/* Answer Buttons */
+/* Answer Buttons - Tăng chiều cao để dễ chạm trên mobile */
 .ans-btn { 
     background-color: #1e293b; 
     border: 2px solid #334155; 
-    border-radius: 20px; 
-    color: #ffffff !important; 
+    border-radius: 18px; 
+    color: white !important;
+    padding: 16px;
+    font-size: 16px;
     font-weight: 700;
-    transition: all 0.2s; 
+    transition: all 0.2s;
 }
-.ans-btn:hover { 
-    background-color: #334155; 
-    border-color: #38bdf8; 
-    transform: scale(1.02);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+@media (min-width: 768px) {
+    .ans-btn { font-size: 20px; padding: 20px; }
 }
+.ans-btn:active { background-color: #334155; transform: scale(0.96); border-color: #38bdf8; }
 
-/* Toggle Switch */
-.switch { position: relative; display: inline-block; width: 42px; height: 24px; }
+/* Toggle Slider */
+.switch { position: relative; display: inline-block; width: 34px; height: 20px; }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #475569; transition: .4s; border-radius: 34px; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+.slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
 input:checked + .slider { background-color: #0ea5e9; }
-input:checked + .slider:before { transform: translateX(18px); }
+input:checked + .slider:before { transform: translateX(14px); }
 
 .hidden { display: none !important; }
+
+/* Ngăn việc bôi đen chữ khi nhấn nhanh trên mobile */
+* { -webkit-user-select: none; -webkit-touch-callout: none; }
