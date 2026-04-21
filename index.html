@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSK Trainer - GenZ Mastery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HSK Trainer - Mobile & Desktop</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
@@ -18,208 +18,190 @@
 
         * { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        body {
+        /* Hỗ trợ cuộn mượt cho toàn bộ trang */
+        body, html {
             margin: 0;
+            padding: 0;
             font-family: 'Quicksand', sans-serif;
             background: radial-gradient(circle at top right, #1e1b4b, #0f172a);
             color: #fff;
-            height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* Vỏ bọc ứng dụng có khả năng co giãn */
         .app-shell {
-            width: 1150px; height: 880px; max-width: 95vw; max-height: 95vh;
-            background: var(--glass); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 40px;
-            display: flex; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+            width: 1150px;
+            height: 880px;
+            max-width: 95vw;
+            max-height: 95vh;
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            display: flex;
+            overflow: hidden; /* Chặn cuộn ngoài cùng */
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
         }
 
-        /* --- SIDEBAR --- */
+        /* SIDEBAR có thể cuộn nội dung bên trong */
         .sidebar {
-            width: 340px; background: rgba(0, 0, 0, 0.3);
-            padding: 35px 25px; border-right: 1px solid var(--glass-border);
-            display: flex; flex-direction: column; overflow-y: auto;
+            width: 320px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px 20px;
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Cuộn dọc nếu nội dung dài */
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
         }
 
         .logo-text {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 26px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900; font-size: 24px;
             background: linear-gradient(to right, #818cf8, #f472b6);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 35px; text-align: center; letter-spacing: -1px;
+            margin-bottom: 30px; text-align: center;
         }
 
         .side-title { color: #64748b; font-size: 11px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-        /* Settings Card */
         .settings-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
-            border-radius: 24px; padding: 18px; margin-bottom: 30px;
+            border-radius: 20px; padding: 15px; margin-bottom: 25px;
         }
 
-        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
-        .setting-item:not(:last-child) { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .setting-info { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #e2e8f0; }
-
-        /* Modern Toggle Switch */
-        .tg-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+        .tg-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
         .tg-switch input { opacity: 0; width: 0; height: 0; }
-        .tg-slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255,255,255,0.1); border-radius: 34px; border: 1px solid var(--glass-border);
-        }
-        .tg-slider:before {
-            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-            background-color: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
+        .tg-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.1); border-radius: 34px; border: 1px solid var(--glass-border); }
+        .tg-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; }
         input:checked + .tg-slider { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-color: transparent; }
-        input:checked + .tg-slider:before { transform: translateX(20px); }
+        input:checked + .tg-slider:before { transform: translateX(18px); }
 
-        /* Level Grid */
-        .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 30px; }
-        .lvl-pill {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-            color: #94a3b8; padding: 12px; border-radius: 16px; font-weight: 700;
-            cursor: pointer; text-align: center; font-size: 13px;
-        }
-        .lvl-pill.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-color: transparent; transform: scale(1.05); }
+        .level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .lvl-pill { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #94a3b8; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; text-align: center; font-size: 13px; }
+        .lvl-pill.active { background: var(--primary); color: white; border-color: transparent; }
 
-        /* Personal Files */
-        .personal-section { background: rgba(0,0,0,0.2); border-radius: 24px; padding: 15px; border: 1px dashed var(--glass-border); }
-        .btn-add-file { 
-            width: 100%; padding: 12px; border-radius: 14px; background: rgba(99, 102, 241, 0.1); 
-            border: 1px solid var(--primary); color: #818cf8; font-weight: 800; cursor: pointer; margin-bottom: 12px; font-size: 12px;
+        /* MAIN CONTENT */
+        .main-screen {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto; /* Cuộn nội dung chính nếu màn hình thấp */
         }
-        .btn-add-file:hover { background: var(--primary); color: white; }
-        #personalList { display: flex; flex-direction: column; gap: 8px; }
-        .p-file-item { 
-            display: flex; justify-content: space-between; align-items: center; font-size: 13px; 
-            background: var(--glass); padding: 10px 14px; border-radius: 12px; border: 1px solid transparent;
-        }
-        .p-file-item.active { border-color: var(--accent); background: rgba(6, 182, 212, 0.1); }
-        .btn-del { color: #f87171; cursor: pointer; padding: 5px; opacity: 0.6; }
-        .btn-del:hover { opacity: 1; }
 
-        /* --- MAIN AREA --- */
-        .main-screen { flex: 1; padding: 60px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; position: relative; }
+        .hero-title { font-family: 'Montserrat', sans-serif; font-size: clamp(32px, 8vw, 64px); font-weight: 900; margin: 0; text-align: center; line-height: 1.1; }
+
+        .mode-shelf { display: flex; gap: 15px; margin: 40px 0; width: 100%; flex-wrap: wrap; justify-content: center; }
+        .mode-card { flex: 1; min-width: 140px; background: rgba(255,255,255,0.03); border: 2px solid var(--glass-border); padding: 20px; border-radius: 25px; text-align: center; cursor: pointer; }
+        .mode-card.active { border-color: var(--accent); background: rgba(6, 182, 212, 0.1); }
+
+        .btn-play { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; padding: 20px 60px; border-radius: 100px; font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4); width: fit-content; }
+
+        /* GAME UI */
+        .flash-card { background: var(--glass); width: 100%; max-width: 600px; padding: 50px 20px; border-radius: 40px; border: 1px solid var(--glass-border); text-align: center; position: relative; margin-bottom: 30px; }
+        .q-main { font-size: clamp(40px, 15vw, 100px); font-weight: 900; margin: 0; }
+        .ans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 600px; }
+        .ans-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; padding: 18px; border-radius: 20px; font-size: 16px; font-weight: 700; cursor: pointer; }
+
+        /* RESPONSIVE CHO ĐIỆN THOẠI */
+        @media (max-width: 768px) {
+            .app-shell {
+                flex-direction: column; /* Chuyển Sidebar lên trên hoặc ẩn đi */
+                height: 100vh;
+                max-height: 100vh;
+                max-width: 100vw;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                max-height: 30%;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+                padding: 15px;
+            }
+
+            .logo-text { margin-bottom: 10px; font-size: 20px; }
+            .level-grid { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; }
+            .lvl-pill { min-width: 80px; flex-shrink: 0; }
+
+            .main-screen { padding: 20px; }
+            .ans-grid { grid-template-columns: 1fr; } /* Đáp án xếp 1 hàng dọc trên điện thoại */
+            .hero-title { font-size: 36px; }
+            .mode-shelf { gap: 10px; }
+            .mode-card { padding: 15px; border-radius: 20px; }
+        }
+
         .screen { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; }
         .screen.active { display: flex; }
-
-        h1.hero-title { font-family: 'Montserrat', sans-serif; font-size: 64px; font-weight: 900; margin: 0; line-height: 1; text-align: center; }
-        
-        .mode-shelf { display: flex; gap: 20px; margin: 50px 0; width: 100%; }
-        .mode-card { 
-            flex: 1; background: rgba(255,255,255,0.03); border: 2px solid var(--glass-border); 
-            padding: 30px 20px; border-radius: 35px; text-align: center; cursor: pointer; 
-        }
-        .mode-card.active { border-color: var(--accent); background: rgba(6, 182, 212, 0.1); transform: translateY(-10px); }
-        .mode-card b { font-size: 20px; color: var(--accent); display: block; margin-bottom: 8px; }
-        .mode-card span { font-size: 13px; color: #64748b; }
-
-        .btn-play { 
-            background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; 
-            padding: 25px 90px; border-radius: 100px; font-family: 'Montserrat', sans-serif; 
-            font-size: 24px; font-weight: 900; cursor: pointer; box-shadow: 0 20px 50px rgba(99, 102, 241, 0.4); 
-        }
-        .btn-play:hover { transform: scale(1.05); filter: brightness(1.1); }
-
-        /* --- GAME UI --- */
-        .game-nav { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .hp-dots { font-size: 30px; color: #ef4444; filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.4)); }
-        
-        .flash-card { 
-            background: var(--glass); width: 100%; max-width: 650px; padding: 60px; 
-            border-radius: 50px; border: 1px solid var(--glass-border); text-align: center; 
-            position: relative; box-shadow: 0 40px 80px rgba(0,0,0,0.4); margin-bottom: 40px; 
-        }
-        .q-main { font-size: 100px; font-weight: 900; margin: 0; }
-        .q-sub-container { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 20px; min-height: 50px; }
-        .q-sub { font-size: 28px; color: var(--accent); font-weight: 700; margin: 0; }
-        .btn-peek { 
-            background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: white; 
-            width: 45px; height: 45px; border-radius: 14px; cursor: pointer; display: flex; 
-            align-items: center; justify-content: center; font-size: 20px; 
-        }
-        
-        .ans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 700px; }
-        .ans-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; 
-            padding: 25px; border-radius: 30px; font-size: 20px; font-weight: 700; cursor: pointer; 
-        }
-        .ans-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); transform: translateY(-5px); }
-
         .shake { animation: error 0.4s ease-in-out; }
         @keyframes error { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
-
     </style>
 </head>
 <body>
 
     <div class="app-shell">
         <aside class="sidebar">
-            <div class="logo-text">HSK GEN-Z ⚡</div>
+            <div class="logo-text">HSK MASTER ⚡</div>
             
-            <div class="side-title">Cấu hình nhanh ⚙️</div>
+            <div class="side-title">Cấu hình ⚙️</div>
             <div class="settings-card">
                 <div class="setting-item">
-                    <div class="setting-info"><span>👁️</span> Hiện Pinyin</div>
-                    <label class="tg-switch">
-                        <input type="checkbox" id="showPinyin" checked>
-                        <span class="tg-slider"></span>
-                    </label>
+                    <span>Hiện Pinyin</span>
+                    <label class="tg-switch"><input type="checkbox" id="showPinyin" checked><span class="tg-slider"></span></label>
                 </div>
                 <div class="setting-item">
-                    <div class="setting-info"><span>🔀</span> Trộn câu</div>
-                    <label class="tg-switch">
-                        <input type="checkbox" id="isRandom" checked>
-                        <span class="tg-slider"></span>
-                    </label>
+                    <span>Trộn câu</span>
+                    <label class="tg-switch"><input type="checkbox" id="isRandom" checked><span class="tg-slider"></span></label>
                 </div>
             </div>
 
-            <div class="side-title">Hệ thống Level 🏆</div>
+            <div class="side-title">Level 🏆</div>
             <div class="level-grid" id="levelGrid"></div>
             
             <div class="side-title">Personal Files 📂</div>
-            <div class="personal-section">
+            <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 15px; border: 1px dashed var(--glass-border);">
                 <input type="file" id="fileInput" accept=".csv" style="display: none;">
-                <button class="btn-add-file" onclick="document.getElementById('fileInput').click()">+ THÊM FILE CSV</button>
-                <div id="personalList"></div>
+                <button onclick="document.getElementById('fileInput').click()" style="width: 100%; background: var(--primary); border: none; color: white; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 11px;">+ THÊM CSV</button>
+                <div id="personalList" style="margin-top: 10px; display: flex; flex-direction: column; gap: 5px;"></div>
             </div>
         </aside>
 
         <main class="main-screen">
             <div id="homeScreen" class="screen active">
-                <h1 class="hero-title">BẮT ĐẦU<br><span style="color: var(--accent);">HÀNH TRÌNH</span></h1>
-                <p style="color: #64748b; font-size: 18px; margin-top: 10px;">Học tiếng Trung kiểu GenZ cùng tuanbmo ✌️</p>
-
+                <h1 class="hero-title">READY TO<br><span style="color: var(--accent);">LEARN?</span></h1>
                 <div class="mode-shelf">
-                    <div class="mode-card active" data-mode="NGHĨA"><b>NGHĨA</b><span>Đoán bừa hay đoán mò?</span></div>
-                    <div class="mode-card" data-mode="PINYIN"><b>PINYIN</b><span>Đọc sai là tự vả!</span></div>
-                    <div class="mode-card" data-mode="CHỮ HÁN"><b>CHỮ HÁN</b><span>Chế độ 'Căng não'!</span></div>
+                    <div class="mode-card active" data-mode="NGHĨA"><b>NGHĨA</b></div>
+                    <div class="mode-card" data-mode="PINYIN"><b>PINYIN</b></div>
+                    <div class="mode-card" data-mode="CHỮ HÁN"><b>CHỮ HÁN</b></div>
                 </div>
-
                 <button class="btn-play" id="btnPlay">VÀO VIỆC!</button>
-                <p style="margin-top: 40px; color: #334155; font-size: 13px; font-weight: 800;">STORAGE EDITION • 2026</p>
             </div>
 
             <div id="gameScreen" class="screen">
                 <nav class="game-nav">
-                    <div class="hp-dots" id="hpBox">❤️❤️❤️❤️❤️</div>
-                    <div id="progressInfo" style="font-weight: 800; color: #64748b; font-size: 18px;">0/0</div>
-                    <button onclick="location.reload()" style="background: #ef4444; border: none; color: white; padding: 10px 25px; border-radius: 15px; font-weight: 800; cursor: pointer;">DỪNG</button>
+                    <div id="hpBox" style="font-size: 24px;">❤️❤️❤️❤️❤️</div>
+                    <div id="progressInfo" style="font-weight: 800; color: #64748b;">0/0</div>
+                    <button onclick="location.reload()" style="background: #ef4444; border: none; color: white; padding: 8px 15px; border-radius: 10px; font-weight: 800; cursor: pointer;">THOÁT</button>
                 </nav>
 
                 <div class="flash-card" id="card">
-                    <div id="lvlTag" style="position: absolute; top: 30px; right: 30px; background: var(--accent); color: var(--bg); padding: 6px 15px; border-radius: 100px; font-weight: 900; font-size: 12px;">HSK</div>
+                    <div id="lvlTag" style="position: absolute; top: 20px; right: 20px; background: var(--accent); color: var(--bg); padding: 4px 10px; border-radius: 8px; font-weight: 900; font-size: 11px;">HSK</div>
                     <h2 class="q-main" id="qMain">你好</h2>
-                    <div class="q-sub-container">
-                        <p class="q-sub" id="qSub">nǐ hǎo</p>
-                        <button class="btn-peek" id="btnPeek" title="Xem lén">👁️</button>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px;">
+                        <p id="qSub" style="font-size: 24px; color: var(--accent); font-weight: 700; margin: 0;">nǐ hǎo</p>
+                        <button id="btnPeek" style="background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: white; width: 35px; height: 35px; border-radius: 8px; cursor: pointer; font-size: 16px;">👁️</button>
                     </div>
                 </div>
-
                 <div class="ans-grid" id="ansGrid"></div>
             </div>
         </main>
@@ -230,7 +212,7 @@
         let selectedLevels = [], selectedPersonal = [], selectedMode = "NGHĨA", masterData = [], currentQueue = [], index = 0, hp = 5, score = 0;
         let personalFiles = JSON.parse(localStorage.getItem('hsk_personal_files') || '{}');
 
-        // Render Level Grid
+        // Render Sidebar Levels
         const grid = document.getElementById('levelGrid');
         levels.forEach(l => {
             const btn = document.createElement('div');
@@ -238,13 +220,12 @@
             btn.onclick = () => {
                 btn.classList.toggle('active');
                 const val = l.toLowerCase();
-                if (selectedLevels.includes(val)) selectedLevels = selectedLevels.filter(x => x !== val);
-                else selectedLevels.push(val);
+                selectedLevels.includes(val) ? selectedLevels = selectedLevels.filter(x => x !== val) : selectedLevels.push(val);
             };
             grid.appendChild(btn);
         });
 
-        // Personal Files Logic
+        // Personal Files
         document.getElementById('fileInput').onchange = (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -262,79 +243,52 @@
             const list = document.getElementById('personalList');
             list.innerHTML = '';
             Object.keys(personalFiles).forEach(name => {
-                const isActive = selectedPersonal.includes(name);
                 const item = document.createElement('div');
-                item.className = `p-file-item ${isActive ? 'active' : ''}`;
-                item.innerHTML = `
-                    <span onclick="togglePersonal('${name}')" style="cursor:pointer; flex:1; font-weight:700;">${name}</span>
-                    <span class="btn-del" onclick="deletePersonal('${name}')">✕</span>
-                `;
+                item.style = `display:flex; justify-content:space-between; font-size:12px; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; border:1px solid ${selectedPersonal.includes(name) ? 'var(--accent)' : 'transparent'}`;
+                item.innerHTML = `<span onclick="togglePersonal('${name}')" style="cursor:pointer; flex:1">${name}</span><span onclick="deletePersonal('${name}')" style="color:#ef4444; cursor:pointer">✕</span>`;
                 list.appendChild(item);
             });
         }
 
         window.togglePersonal = (name) => {
-            if(selectedPersonal.includes(name)) selectedPersonal = selectedPersonal.filter(x => x !== name);
-            else selectedPersonal.push(name);
+            selectedPersonal.includes(name) ? selectedPersonal = selectedPersonal.filter(x => x !== name) : selectedPersonal.push(name);
             renderPersonalList();
         };
 
         window.deletePersonal = (name) => {
-            if(confirm(`Xóa file "${name}"?`)) {
-                delete personalFiles[name];
-                selectedPersonal = selectedPersonal.filter(x => x !== name);
-                localStorage.setItem('hsk_personal_files', JSON.stringify(personalFiles));
-                renderPersonalList();
-            }
+            if(confirm('Xóa file này?')) { delete personalFiles[name]; selectedPersonal = selectedPersonal.filter(x => x !== name); localStorage.setItem('hsk_personal_files', JSON.stringify(personalFiles)); renderPersonalList(); }
         };
 
         // Mode Switching
         document.querySelectorAll('.mode-card').forEach(card => {
-            card.onclick = () => {
-                document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                selectedMode = card.dataset.mode;
-            };
+            card.onclick = () => { document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active')); card.classList.add('active'); selectedMode = card.dataset.mode; };
         });
 
-        // Core Logic
+        // Play Logic
         document.getElementById('btnPlay').onclick = async () => {
-            if (selectedLevels.length === 0 && selectedPersonal.length === 0) return alert("Chọn ít nhất 1 Level hoặc File cá nhân!");
-            
-            document.getElementById('btnPlay').innerText = "ĐANG TẢI...";
+            if (selectedLevels.length === 0 && selectedPersonal.length === 0) return alert("Chọn ít nhất 1 Level hoặc File!");
             masterData = [];
-
             for (let l of selectedLevels) {
                 try {
                     const res = await fetch(`${l}.csv`);
                     const text = await res.text();
                     const parsed = Papa.parse(text, { skipEmptyLines: true });
                     masterData = [...masterData, ...parsed.data.map(r => ({ h: r[0], p: r[1], m: r[2], lvl: l.toUpperCase() }))];
-                } catch(e) { console.warn(`Không thấy file ${l}.csv`); }
+                } catch(e) {}
             }
-
             for (let name of selectedPersonal) {
-                const text = personalFiles[name];
-                const parsed = Papa.parse(text, { skipEmptyLines: true });
+                const parsed = Papa.parse(personalFiles[name], { skipEmptyLines: true });
                 masterData = [...masterData, ...parsed.data.map(r => ({ h: r[0], p: r[1], m: r[2], lvl: name.toUpperCase() }))];
             }
-
-            if (masterData.length === 0) return (alert("Dữ liệu rỗng!"), document.getElementById('btnPlay').innerText = "VÀO VIỆC!");
-
             currentQueue = [...masterData];
             if (document.getElementById('isRandom').checked) currentQueue.sort(() => Math.random() - 0.5);
-
             document.getElementById('homeScreen').classList.remove('active');
             document.getElementById('gameScreen').classList.add('active');
             render();
         };
 
         function render() {
-            if (index >= currentQueue.length || hp <= 0) {
-                alert(hp <= 0 ? "BẠN ĐÃ BAY MÀU! 💀" : "BẬC THẦY HÁN NGỮ! 🎉");
-                location.reload(); return;
-            }
-
+            if (index >= currentQueue.length || hp <= 0) { alert(hp <= 0 ? "BẠN ĐÃ THẤT BẠI! 💀" : "CHIẾN THẦN TIẾNG TRUNG! 🎉"); location.reload(); return; }
             const data = currentQueue[index];
             const isP = document.getElementById('showPinyin').checked;
             const btnPeek = document.getElementById('btnPeek');
@@ -343,60 +297,38 @@
             document.getElementById('lvlTag').innerText = data.lvl;
             document.getElementById('progressInfo').innerText = `${score}/${currentQueue.length}`;
             document.getElementById('hpBox').innerText = "❤️".repeat(Math.max(0, hp));
-            btnPeek.style.display = "none";
             
+            btnPeek.style.display = "none";
             let correct = "";
             if (selectedMode === "NGHĨA") {
-                document.getElementById('qMain').innerText = data.h;
-                document.getElementById('qMain').style.fontSize = "100px";
-                correct = data.m;
-                if (isP) qSub.innerText = data.p;
-                else { qSub.innerText = "****"; btnPeek.style.display = "flex"; }
+                document.getElementById('qMain').innerText = data.h; document.getElementById('qMain').style.fontSize = "clamp(40px, 15vw, 100px)";
+                correct = data.m; isP ? qSub.innerText = data.p : (qSub.innerText = "****", btnPeek.style.display = "block");
             } else if (selectedMode === "PINYIN") {
-                document.getElementById('qMain').innerText = data.h;
-                document.getElementById('qMain').style.fontSize = "100px";
-                qSub.innerText = data.m;
-                correct = data.p;
+                document.getElementById('qMain').innerText = data.h; qSub.innerText = data.m; correct = data.p;
             } else {
-                document.getElementById('qMain').innerText = data.m;
-                document.getElementById('qMain').style.fontSize = "45px";
-                correct = data.h;
-                if (isP) qSub.innerText = data.p;
-                else { qSub.innerText = "****"; btnPeek.style.display = "flex"; }
+                document.getElementById('qMain').innerText = data.m; document.getElementById('qMain').style.fontSize = "30px";
+                correct = data.h; isP ? qSub.innerText = data.p : (qSub.innerText = "****", btnPeek.style.display = "block");
             }
-
             btnPeek.onclick = () => { qSub.innerText = data.p; btnPeek.style.display = "none"; };
 
-            const ansGrid = document.getElementById('ansGrid');
-            ansGrid.innerHTML = "";
+            const ansGrid = document.getElementById('ansGrid'); ansGrid.innerHTML = "";
             const key = selectedMode === "NGHĨA" ? 'm' : (selectedMode === "PINYIN" ? 'p' : 'h');
             let choices = [correct];
             const pool = [...new Set(masterData.map(x => x[key]))];
-            
             while(choices.length < 4 && pool.length > 4) {
                 let r = pool[Math.floor(Math.random() * pool.length)];
                 if (!choices.includes(r)) choices.push(r);
             }
             choices.sort(() => Math.random() - 0.5);
-
             choices.forEach(c => {
-                const b = document.createElement('button');
-                b.className = 'ans-btn'; b.innerText = c;
+                const b = document.createElement('button'); b.className = 'ans-btn'; b.innerText = c;
                 b.onclick = () => {
                     if (c === correct) { score++; index++; render(); }
-                    else {
-                        hp--; 
-                        document.getElementById('card').classList.add('shake');
-                        setTimeout(() => document.getElementById('card').classList.remove('shake'), 400);
-                        alert(`Sai rồi! Đáp án đúng là: ${correct}`);
-                        currentQueue.push(currentQueue.splice(index, 1)[0]);
-                        render();
-                    }
+                    else { hp--; document.getElementById('card').classList.add('shake'); setTimeout(() => document.getElementById('card').classList.remove('shake'), 400); alert("Đáp án: " + correct); currentQueue.push(currentQueue.splice(index, 1)[0]); render(); }
                 };
                 ansGrid.appendChild(b);
             });
         }
-
         renderPersonalList();
     </script>
 </body>
