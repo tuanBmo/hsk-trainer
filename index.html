@@ -4,61 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HSK 3.0 Trainer - Mastery Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
 <body>
     <div class="app-container">
-        <aside class="sidebar">
-            <div class="section-title">🎯 CHỌN LEVEL</div>
-            <div class="level-grid" id="levelGrid">
-                </div>
+        <div id="menuScreen" class="screen active">
+            <aside class="sidebar">
+                <div class="section-title">🎯 CHỌN LEVEL</div>
+                <div class="level-grid" id="levelGrid"></div>
 
-            <div class="section-title" style="margin-top: 30px;">⚙️ SETTINGS</div>
-            <div class="settings-box">
-                <div class="switch-group">
-                    <span>Hiện Pinyin</span>
-                    <input type="checkbox" id="showPinyin" checked>
+                <div class="section-title" style="margin-top: 30px;">⚙️ SETTINGS</div>
+                <div class="settings-box">
+                    <div class="switch-group">
+                        <span>Hiện Pinyin</span>
+                        <input type="checkbox" id="settingPinyin" checked>
+                    </div>
+                    <div class="switch-group">
+                        <span>Hiện Ví dụ</span>
+                        <input type="checkbox" id="settingExample" checked>
+                    </div>
+                    <div class="switch-group">
+                        <span>Trộn câu</span>
+                        <input type="checkbox" id="settingRandom" checked>
+                    </div>
                 </div>
-                <div class="switch-group">
-                    <span>Hiện Ví dụ</span>
-                    <input type="checkbox" id="showExample" checked>
+            </aside>
+
+            <main class="main-content">
+                <header class="header">
+                    <h1>HSK 3.0 Trainer</h1>
+                    <p>Dăm ba cái chữ Hán, nhắm mắt cũng chọn đại được! 😎</p>
+                </header>
+
+                <section class="mode-container">
+                    <div class="mode-title">🎁 HÀNH XÁC CHẾ ĐỘ NÀO ĐÂY CHIẾN THẦN?</div>
+                    <div class="mode-buttons">
+                        <button class="mode-btn active" data-mode="NGHĨA">NGHĨA<span>Đoán bừa hay đoán mò?</span></button>
+                        <button class="mode-btn" data-mode="PINYIN">PINYIN<span>Đọc sai là tự vả!</span></button>
+                        <button class="mode-btn" data-mode="CHỮ HÁN">CHỮ HÁN<span>Chế độ 'Căng não'!</span></button>
+                    </div>
+                </section>
+
+                <button class="btn-start" id="btnStart">LÊN TRÌNH PHÁP SƯ</button>
+                <div class="warning">⚠️ Học nhiều quá là bị nghiện đó nha!</div>
+                <footer class="footer">Author: tuanbmo</footer>
+            </main>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <nav class="game-nav">
+                <div id="hpDisplay" class="hp-hearts">❤️❤️❤️❤️❤️</div>
+                <div class="nav-controls">
+                    <button class="nav-btn reload" onclick="location.reload()">↻ Lại</button>
+                    <button class="nav-btn exit" onclick="location.reload()">✖ Bỏ cuộc</button>
                 </div>
-                <div class="switch-group">
-                    <span>Trộn câu</span>
-                    <input type="checkbox" id="isRandom" checked>
-                </div>
+            </nav>
+            
+            <div id="progressText" class="progress-info">Đã diệt: 0/0</div>
+
+            <div class="quiz-card">
+                <div id="lvlBadge" class="lvl-badge">HSK1</div>
+                <div id="mainQuestion" class="main-q">你好</div>
+                <div id="subQuestion" class="sub-q">nǐ hǎo</div>
+                <div id="exampleText" class="example-text"></div>
             </div>
-        </aside>
 
-        <main class="main-content">
-            <header class="header">
-                <h1>HSK 3.0 Trainer</h1>
-                <p>Dăm ba cái chữ Hán, nhắm mắt cũng chọn đại được! 😎</p>
-            </header>
-
-            <section class="mode-container">
-                <div class="mode-title">🎁 HÀNH XÁC CHẾ ĐỘ NÀO ĐÂY CHIẾN THẦN?</div>
-                <div class="mode-buttons">
-                    <button class="mode-btn active" data-mode="NGHĨA">
-                        NGHĨA
-                        <span>Đoán bừa hay đoán mò?</span>
-                    </button>
-                    <button class="mode-btn" data-mode="PINYIN">
-                        PINYIN
-                        <span>Đọc sai là tự vả!</span>
-                    </button>
-                    <button class="mode-btn" data-mode="CHỮ HÁN">
-                        CHỮ HÁN
-                        <span>Chế độ 'Căng não'!</span>
-                    </button>
-                </div>
-            </section>
-
-            <button class="btn-start" id="btnStart">LÊN TRÌNH PHÁP SƯ</button>
-
-            <div class="warning">⚠️ Học nhiều quá là bị nghiện đó nha!</div>
-            <footer class="footer">Author: tuanbmo</footer>
-        </main>
+            <div id="answerContainer" class="answer-container"></div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
